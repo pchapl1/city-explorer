@@ -1,29 +1,27 @@
 import React from "react";
+import "./CityForm.css"
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 class CityForm extends React.Component {
     
-
-
-    handleInput = (e)=> {
-        e.preventDefault()
-
-  
-        this.props.citySubmit()
+    handleClick = (e)=> {
+      e.preventDefault()
+      let city = e.target.city.value
+      this.props.citySubmit(city)
     }
 
     render () {
 
 
         return (
-            <Form>
+            <Form className="city-form"  onSubmit={this.handleClick}>
             <Form.Group className="mb-3" controlId="formBasicEmail" id='form'>
               <Form.Label>Choose a city</Form.Label>
-              <Form.Control  type="text" name="city" placeholder="Enter city" />
+              <Form.Control onChange={this.props.handleCityInput} type="text" name="city" placeholder="Enter city" />
             </Form.Group>
-            <Button onClick={this.handleInput} variant="primary" type="submit">
-              Submit
+            <Button variant="primary" type="submit">
+              Explore!
             </Button>
           </Form>
         )

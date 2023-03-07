@@ -1,7 +1,9 @@
 import React from 'react';
 import axios from 'axios';
 import './App.css';
+import Container from 'react-bootstrap/Container';
 import CityForm from './components/CityForm';
+import City from './components/City';
 
 class App extends React.Component {
 
@@ -15,47 +17,53 @@ class App extends React.Component {
       errorMessage: ''
     }
   }
-
-  citySubmit = async (cityNameInput) => {
-
-    // let url = `https://us1.locationiq.com/v1/search?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=seattle&format=json`;
-    // let url = `https://us1.locationiq.com/v1/search?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${cityNameInput}&format=json`;
-    
   //   let petData = await axios.get(`${process.env.REACT_APP_SERVER}/pet?species=${this.state.species}`)
   //   this.setState({
   //     petData : petData.data,
   //     showPet : true
   //   })
-  //   let state;
 
-  //   try {
-  //     // state = await axios.get(url)
-  //     this.setState({
-  //       cityData : state.data[0],
-  //       error: false,
-  //       errorMessage: ""
-  //     })
-  //   }
-  //   catch(error) {
-  //     console.log('error: ', error)
-  //     this.setState({
-  //       error: true,
-  //       errorMessage: `Error: ${error.response.status}`
-  //     })
-  //   }
+  handleCityInput = (e) => {
+    this.setState({
+      cityNameInput : e.target.value
+    })
+  }
+
+  citySubmit = async () => {
+
+    let url = `https://us1.locationiq.com/v1/search?key=pk.${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.cityNameInput}&format=json`;
+
+    let cityData;
+
+    try {
+      cityData = await axios.get(url)
+      
+      let mapUrl = `https://maps.locationiq.com/v3/staticmap?key=pk.${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${cityData.data[0].lat},${cityData.data[0].lon}&zoom=12`
+      this.setState({
+        cityData : cityData.data[0],
+        error: false,
+        errorMessage: "",
+        mapUrl : mapUrl
+      })
+    }
+    catch(error) {
+      console.log('error: ', error)
+      this.setState({
+        error: true,
+        errorMessage: `${error.response.status} Error: City Not Found `
+      })
+    }
   }
 
   
   render () {
-    let cityName = this.state.cityData.display_name
-    let lat = this.state.cityData.lat
-    let long = this.state.cityData.long
-    let mapUrl = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${lat},${long}&zoom=12`
-    console.log(cityName)
+
     return (
-      <>
-      <CityForm citySubmit = {this.citySubmit} />
-      </>
+      <Container>
+        <CityForm handleCityInput={this.handleCityInput} citySubmit = {this.citySubmit} />
+        <City errorMessage={this.state.errorMessage} mapUrl={this.state.mapUrl}  data={this.state.cityData} />
+    </Container>
+
     )
   }
 }
