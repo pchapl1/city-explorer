@@ -31,14 +31,14 @@ class App extends React.Component {
 
   citySubmit = async () => {
 
-    let url = `https://us1.locationiq.com/v1/search?key=pk.${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.cityNameInput}&format=json`;
+    let url = `https://us1.locationiq.com/v1/search?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.cityNameInput}&format=json`;
 
     let cityData;
 
     try {
       cityData = await axios.get(url)
       
-      let mapUrl = `https://maps.locationiq.com/v3/staticmap?key=pk.${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${cityData.data[0].lat},${cityData.data[0].lon}&zoom=12`
+      let mapUrl = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${cityData.data[0].lat},${cityData.data[0].lon}&zoom=12`
       this.setState({
         cityData : cityData.data[0],
         error: false,
