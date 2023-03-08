@@ -47,13 +47,13 @@ class App extends React.Component {
       })
     }
     catch(error) {
-      console.log('error: ', error)
       this.setState({
         error: true,
         errorMessage: `${error.response.status} Error: City Not Found `
       })
     }
   }
+
 
   
   render () {
