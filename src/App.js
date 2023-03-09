@@ -5,6 +5,7 @@ import Container from 'react-bootstrap/Container';
 import CityForm from './components/CityForm';
 import Weather from "./components/Weather";
 import City from './components/City';
+import Movie from './components/Movie';
 
 class App extends React.Component {
 
@@ -14,6 +15,7 @@ class App extends React.Component {
     this.state = {
       cityNameInput : '',
       cityData : [],
+      movieData : null,
       error: false,
       errorMessage: ''
     }
@@ -35,7 +37,6 @@ class App extends React.Component {
   }
 
   weatherSubmit = async () => {
-    console.log('weathersubmit clicked')
     let url = `http://localhost:3001/weather?city=${this.state.cityNameInput}&format=json`
     try {
       let weatherData = await axios.get(url)
@@ -81,10 +82,11 @@ class App extends React.Component {
     let url = `http://localhost:3001/movies?city=${this.state.cityNameInput}&format=json`;
 
     try {
-      // console.log('in movie submit')
       let movieData = await axios.get(url);
-
-      // console.log(movieData)
+      console.log(movieData.data)
+      this.setState({
+        movieData: movieData.data
+      })
 
     }
     catch(error){
@@ -94,25 +96,36 @@ class App extends React.Component {
         errorMessage: error
       });
     };
-
   }
   
   render () {
 
+
     return (
+      <>
+
       <Container>
-        <div className="city-weather">
-          <CityForm handleCityInput={this.handleCityInput} citySubmit = {this.handleSearch} />
-          <Weather errorMessage={this.state.errorMessage} data = {this.state.weatherData} />
-        </div>
+        <CityForm handleCityInput={this.handleCityInput} citySubmit = {this.handleSearch} />
+        <Weather errorMessage={this.state.errorMessage} data = {this.state.weatherData} />
+
         { this.state.cityData
         &&
         <>
           <City errorMessage={this.state.errorMessage} mapUrl={this.state.mapUrl}  data={this.state.cityData} />
         </>
-        }        
-     </Container>
+        }  
+        {
+          this.state.movieData
+            &&
+            <>
+            {this.state.movieData.map(movie => <Movie key={movie.id} movie={movie} />)}
 
+            
+            </>
+        }    
+
+     </Container>
+    </>
     )
   }
 }
