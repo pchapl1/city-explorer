@@ -30,6 +30,7 @@ class App extends React.Component {
 
     this.weatherSubmit()
     this.citySubmit()
+    this.movieSubmit()
 
   }
 
@@ -78,7 +79,10 @@ class App extends React.Component {
     }
   }
 
+  movieSubmit = async () => {
 
+
+  }
   
   render () {
 
