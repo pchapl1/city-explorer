@@ -3,6 +3,7 @@ import axios from 'axios';
 import './App.css';
 import Container from 'react-bootstrap/Container';
 import CityForm from './components/CityForm';
+import Weather from "./components/Weather";
 import City from './components/City';
 
 class App extends React.Component {
@@ -17,16 +18,39 @@ class App extends React.Component {
       errorMessage: ''
     }
   }
-  //   let petData = await axios.get(`${process.env.REACT_APP_SERVER}/pet?species=${this.state.species}`)
-  //   this.setState({
-  //     petData : petData.data,
-  //     showPet : true
-  //   })
+
 
   handleCityInput = (e) => {
     this.setState({
       cityNameInput : e.target.value
     })
+  }
+
+  handleSearch = async () => {
+
+    this.weatherSubmit()
+    this.citySubmit()
+
+  }
+
+  weatherSubmit = async () => {
+
+    let url = `http://localhost:3001/weather?city=${this.state.cityNameInput}&format=json`
+
+    try {
+      let weatherData = await axios.get(url)
+
+      this.setState({
+        weatherData: weatherData.data,
+        
+      })
+      
+    } catch (error) {
+      this.setState({
+        error: true,
+        errorMessage: error
+      })
+    }
   }
 
   citySubmit = async () => {
@@ -60,9 +84,17 @@ class App extends React.Component {
 
     return (
       <Container>
-        <CityForm handleCityInput={this.handleCityInput} citySubmit = {this.citySubmit} />
-        <City errorMessage={this.state.errorMessage} mapUrl={this.state.mapUrl}  data={this.state.cityData} />
-    </Container>
+        <div className="city-weather">
+          <CityForm handleCityInput={this.handleCityInput} citySubmit = {this.handleSearch} />
+          <Weather errorMessage={this.state.errorMessage} data = {this.state.weatherData} />
+        </div>
+        { this.state.cityData
+        &&
+        <>
+          <City errorMessage={this.state.errorMessage} mapUrl={this.state.mapUrl}  data={this.state.cityData} />
+        </>
+        }        
+     </Container>
 
     )
   }

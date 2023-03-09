@@ -1,6 +1,8 @@
 import React from "react";
 import "./City.css";
+import Weather from "./Weather";
 class City extends React.Component {
+
 
 
     render () {
@@ -13,6 +15,7 @@ class City extends React.Component {
                 <p>City: {this.props.data.display_name}</p>
                 <p>latitude: {this.props.data.lat}</p>
                 <p>longitude: {this.props.data.lon}</p>
+
                 <img src={this.props.mapUrl} alt="" />
             </div>
 
