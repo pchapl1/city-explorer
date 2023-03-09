@@ -4,13 +4,12 @@ import ListGroup from 'react-bootstrap/ListGroup';
 class Weather extends React.Component {
 
     render () {
-
-        
-
-        console.log(this.props.data)
+        if (this.props.data) {
+            console.log('hello')
+        }
         return (
             <>
-                { this.props.data 
+                { this.props.data
                     &&
                     <>
                         <h3>Weather forecast</h3>

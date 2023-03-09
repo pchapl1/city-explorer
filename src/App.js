@@ -35,15 +35,12 @@ class App extends React.Component {
   }
 
   weatherSubmit = async () => {
-
+    console.log('weathersubmit clicked')
     let url = `http://localhost:3001/weather?city=${this.state.cityNameInput}&format=json`
-
     try {
       let weatherData = await axios.get(url)
-
       this.setState({
-        weatherData: weatherData.data,
-        
+        weatherData: weatherData.data
       })
       
     } catch (error) {
@@ -81,6 +78,22 @@ class App extends React.Component {
 
   movieSubmit = async () => {
 
+    let url = `http://localhost:3001/movies?city=${this.state.cityNameInput}&format=json`;
+
+    try {
+      // console.log('in movie submit')
+      let movieData = await axios.get(url);
+
+      // console.log(movieData)
+
+    }
+    catch(error){
+      console.log(error)
+      this.setState({
+        error: true,
+        errorMessage: error
+      });
+    };
 
   }
   
